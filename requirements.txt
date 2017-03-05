@@ -1,0 +1,5 @@
+flask
+influxdb
+openpyxl<2.4.0
+petl
+pycurl
