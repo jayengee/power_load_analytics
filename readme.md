@@ -3,24 +3,24 @@
 ## Overview ##
 Data ingestion scripts and API for power load metrics written in Flask, ETL-ing from .csv's and storing into/querying against a local InfluxDB instance
 
-##Request/Response Endpoints##
+## Request/Response Endpoints ##
 
 endpoint | params | description
 ------------- | ------------- | -------------
 rawQuery | `rawQuery [object]` | Returns results of raw InfluxQL query passed.
 query | `query [Object]` | Returns results of query constructed via query parameters passed
 
-###rawQuery###
-####Structure####
+### rawQuery ###
+#### Structure ####
 ```
 {
   "rawQuery": "SHOW STATS"
 }
 ```
-####Examples####
+#### Examples ####
 
-###query###
-####Structure####
+### query ###
+#### Structure ####
 ```
 {
   "query": {
@@ -35,4 +35,4 @@ query | `query [Object]` | Returns results of query constructed via query parame
   }
 }
 ```
-####Examples####
+#### Examples ####
