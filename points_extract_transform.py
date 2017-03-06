@@ -1,4 +1,5 @@
 import datetime
+from metadata_load import get_metadata
 import petl as etl
 
 def get_data() :
@@ -34,6 +35,10 @@ def get_data() :
         'h23': float,
         'h24': float
     })
+
+    #join metadata
+    metadata = get_metadata()
+    data_rows = etl.join(data_rows, metadata, key = 'zone_id')
     data_rows = etl.dicts(data_rows)
 
     # transform points into format for ingestion into influxdb
@@ -55,6 +60,8 @@ def get_data() :
                     'measurement': 'power_load',
                     'tags': {
                         'zone_id': row['zone_id'],
+                        'category': row['category'],
+                        'city': row['city']
                     },
                     'time': time,
                     'fields': {
