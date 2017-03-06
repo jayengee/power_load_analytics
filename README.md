@@ -14,7 +14,7 @@ query | `query [Object]` | Returns results of query constructed via query parame
 #### Structure ####
 ```
 {
-  "rawQuery": "SHOW STATS"
+  "rawQuery": <string>
 }
 ```
 #### Examples ####
