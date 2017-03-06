@@ -11,17 +11,18 @@
 def construct_query (query):
     select = construct_select_statement(query)
     where = construct_where_statement(query)
-    full_query = select + ' from analytics.power_load ' + where
+    full_query = select + ' from power_load ' + where
     return full_query
 
 
 # construct select statement:
     # construct aggregation
 def construct_select_statement (query):
-    select = 'SELECT '
+    select = "select "
 
     aggregation_options = ['max', 'min', 'average']
 
+    # appends aggregation if presented
     if query.get("aggregation") and (query.get("aggregation") in aggregation_options) :
         select += query["aggregation"]
 
@@ -38,14 +39,13 @@ def construct_where_row (filter):
     row = ''
     filter_options = ['zone_id', 'category', 'city', 'time_start', 'time_end']
 
+    #checks if filter key is acceptable, and if so, append to where statement
     for key in filter.keys():
         if key in filter_options:
             if key == 'time_start':
                 rowFilters.append('time >= \'' + str(filter.get(key)) + '\'')
             elif key == 'time_end':
                 rowFilters.append('time <= \'' + str(filter.get(key)) + '\'')
-            elif isinstance(filter.get(key), int):
-                rowFilters.append(key + ' = ' + str(filter.get(key)))
             else:
                 rowFilters.append(key + ' = \'' + str(filter.get(key)) + '\'')
 
@@ -58,6 +58,7 @@ def construct_where_row (filter):
 def construct_where_statement (query):
     where = ''
 
+    # constructs each filter row
     if query.get("filters") and len(query.get("filters")) > 0:
         filter_array = []
         for filter in query.get("filters"):

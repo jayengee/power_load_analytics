@@ -5,10 +5,12 @@ import query_constructor
 
 app = Flask(__name__)
 
+# returns 'ok' if server is responsive
 @app.route('/api/v0.1/status', methods=['GET', 'POST'])
 def status():
     return jsonify({'ok': True})
 
+# returns results of raw influxql query
 @app.route('/api/v0.1/raw_query', methods=['POST'])
 def raw_querier():
     if not request.json:
@@ -17,11 +19,12 @@ def raw_querier():
     rs = list(rs.get_points())
     return jsonify({ 'ok': True, 'results': rs })
 
+# returns results of constructed query
 @app.route('/api/v0.1/query', methods=['POST'])
 def querier():
     if not request.json:
         abort(400)
-    query = query_constructor.construct_select_statement(request.json['query'])
+    query = query_constructor.construct_query(request.json['query'])
     print query
     rs = influxdb().query(query)
     rs = list(rs.get_points())

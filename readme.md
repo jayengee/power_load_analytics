@@ -14,10 +14,15 @@ query | `query [Object]` | Returns results of query constructed via query parame
 #### Structure ####
 ```
 {
-  "rawQuery": "SHOW STATS"
+  "query": <string>
 }
 ```
 #### Examples ####
+get server statistics
+{
+  "rawQuery": "SHOW STATS"
+}
+
 
 ### query ###
 #### Structure ####
@@ -27,7 +32,7 @@ query | `query [Object]` | Returns results of query constructed via query parame
       "aggregation": "average" || "median" || "max" || "min"
       "filters": [
         {
-          "city": [<string>] || "zone_id": [<int>] || "category": [<string>] || "time_start": <string> || "time_end": <string> || "hour": <int>,
+          "city": <string> || "zone_id": <int> || "category": <string> || "time_start": <string> || "time_end": <string>
           ...
         },
         ...
@@ -36,3 +41,33 @@ query | `query [Object]` | Returns results of query constructed via query parame
 }
 ```
 #### Examples ####
+Get all load measurements from zone 1 from 2003-02-06T05:00:00Z onwards
+```
+{
+  "query": {
+  	"filters": [
+  		{
+  			"zone_id": 1,
+  			"time_start": "2003-02-06T05:00:00Z"
+  		}
+  	]
+  }
+}
+```
+
+Get max load from category blue or red sites
+```
+{
+  "query": {
+  	"aggregation": "max",
+  	"filters": [
+  		{
+  			"category": "Blue"
+  		},
+  		{
+  			"category": "Red"
+  		}
+  	]
+  }
+}
+```
