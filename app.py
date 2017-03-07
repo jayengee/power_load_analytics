@@ -1,5 +1,5 @@
 #!flask/bin/python
-from flask import Flask, jsonify, request
+from flask import abort, Flask, jsonify, request
 from influxdb_client import client as influxdb
 import query_constructor
 
@@ -23,9 +23,11 @@ def raw_querier():
     try:
         rs = influxdb().query(request.json['query'])
         rs = list(rs.get_points())
-        return jsonify({ 'ok': True, 'results': rs })
+        return jsonify({ 'ok': True, 'query': request.json['query'], 'results': rs })
     except:
         print('Unexpected error')
+        print('request: {0}'.format(jsonify(request.json)))
+        abort(500)
 
 @app.route('/api/v0.1/query', methods=['POST'])
 def querier():
@@ -38,9 +40,11 @@ def querier():
         query = query_constructor.construct_query(request.json['query'])
         rs = influxdb().query(query)
         rs = list(rs.get_points())
-        return jsonify({ 'ok': True, 'results': rs })
+        return jsonify({ 'ok': True, 'query': query, 'results': rs })
     except:
         print('Unexpected error')
+        print('request: {0}'.format(jsonify(request.json)))
+        abort(500)
 
 if __name__ == '__main__':
     app.run(debug=True)
