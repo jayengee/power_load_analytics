@@ -13,7 +13,8 @@ def get_data ():
         'month': int,
         'day': int
     }
-    data_rows_maps.update({'h{0}'.format(i): float for i in range(1, 25)})
+    data_rows_map.update({'h{0}'.format(i): float for i in range(1, 25)})
+    data_rows = etl.convert(data_rows, data_rows_map)
 
     #join metadata
     metadata = get_metadata()

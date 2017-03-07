@@ -2,7 +2,7 @@ from influxdb_client import client as influxdb
 from points_extract_transform import get_data as points
 import time
 
-def sent_to_influx ():
+def send_to_influx ():
     '''
         grabs points and metadata and sends to influxd
     '''

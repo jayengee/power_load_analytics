@@ -21,7 +21,7 @@ def construct_select_statement (query):
     '''
     select = "select "
 
-    aggregation_options = ['max', 'min', 'average']
+    aggregation_options = ['max', 'min', 'mean', 'median']
 
     # appends aggregation if presented
     if query.get("aggregation") and (query.get("aggregation") in aggregation_options) :
