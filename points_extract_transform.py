@@ -2,39 +2,18 @@ import datetime
 from metadata_load import get_metadata
 import petl as etl
 
-def get_data() :
-    # import points data from .csv, and reformat
+def get_data ():
+    '''
+        import points data from .csv, and reformat
+    '''
     data_rows = etl.fromcsv('data_sources/Load_history_ver2.csv')
-    data_rows = etl.convert(data_rows, {
+    data_rows_map = {
         'zone_id': int,
         'year': int,
         'month': int,
-        'day': int,
-        'h1': float,
-        'h2': float,
-        'h3': float,
-        'h4': float,
-        'h5': float,
-        'h6': float,
-        'h7': float,
-        'h8': float,
-        'h9': float,
-        'h10': float,
-        'h11': float,
-        'h12': float,
-        'h13': float,
-        'h14': float,
-        'h15': float,
-        'h16': float,
-        'h17': float,
-        'h18': float,
-        'h19': float,
-        'h20': float,
-        'h21': float,
-        'h22': float,
-        'h23': float,
-        'h24': float
-    })
+        'day': int
+    }
+    data_rows_maps.update({'h{0}'.format(i): float for i in range(1, 25)})
 
     #join metadata
     metadata = get_metadata()
@@ -46,8 +25,10 @@ def get_data() :
     #define hours
     hours = map(lambda x: 'h'+str(x), range(1, 25))
 
-    #transform array of data into points for nflxudb insertion
     def transform_rows_into_points (rows):
+        '''
+            transform array of data into points for nflxudb insertion
+        '''
         points = []
         for row in rows:
             for hour in hours:

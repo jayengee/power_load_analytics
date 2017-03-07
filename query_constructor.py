@@ -6,18 +6,19 @@
 #Based on category: http://localhost:8000?category=Blue&time_start=2005-01-31T00:00:00Z&time_end=2006-04-18T07:00:00Z
 #Based on stats: http://localhost:8000?zone=7&stat=avg_per_day&time_start=2005-01-31T00:00:00Z&time_end=2006-04-18T07:00:00Z
 
-
-# compile whole query:
 def construct_query (query):
+    '''
+        compile whole query:
+    '''
     select = construct_select_statement(query)
     where = construct_where_statement(query)
-    full_query = select + ' from power_load ' + where
+    full_query = '{0} from power_load {1}'.format(select, where)
     return full_query
 
-
-# construct select statement:
-    # construct aggregation
 def construct_select_statement (query):
+    '''
+        construct select statement:
+    '''
     select = "select "
 
     aggregation_options = ['max', 'min', 'average']
@@ -30,11 +31,10 @@ def construct_select_statement (query):
 
     return select
 
-# construct where statement:
-    # for each row:
-        # construct where row
-
 def construct_where_row (filter):
+    '''
+        construct filter row where statement
+    '''
     rowFilters = []
     row = ''
     filter_options = ['zone_id', 'category', 'city', 'time_start', 'time_end']
@@ -43,19 +43,22 @@ def construct_where_row (filter):
     for key in filter.keys():
         if key in filter_options:
             if key == 'time_start':
-                rowFilters.append('time >= \'' + str(filter.get(key)) + '\'')
+
+                rowFilters.append('time >= \'{0}\''.format(str(filter.get(key))))
             elif key == 'time_end':
-                rowFilters.append('time <= \'' + str(filter.get(key)) + '\'')
+                rowFilters.append('time <= \'{0}\''.format(str(filter.get(key))))
             else:
-                rowFilters.append(key + ' = \'' + str(filter.get(key)) + '\'')
+                rowFilters.append('{0} = \'{1}\''.format(key, str(filter.get(key))))
 
     if len(rowFilters) > 0:
-        row = ' and '.join(rowFilters)
-        row = '(' + row + ')'
+        row = '( {0} )'.format(' and '.join(rowFilters))
 
     return row
 
 def construct_where_statement (query):
+    '''
+    construct aggregate filter where statement
+    '''
     where = ''
 
     # constructs each filter row
